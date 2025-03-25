@@ -8,44 +8,134 @@
         body {
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             background-color: #222;
             overflow: hidden;
         }
         canvas {
             display: block;
-            background: url('room.png') no-repeat;
+            background: url('room.png') no-repeat center center;
             background-size: cover;
             border: 2px solid black;
+        }
+        .inventory {
+            width: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background: #333;
+            border: 2px solid white;
+            margin-bottom: 10px;
+        }
+        .inventory-slot {
+            width: 50px;
+            height: 50px;
+            background-color: #444;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+        }
+        .inventory-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* Item preview styles */
+        .item-preview {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid white;
+            text-align: center;
+        }
+        .item-preview img {
+            width: 200px;
+            height: 200px;
         }
     </style>
 </head>
 <body>
+
+    <!-- Inventory -->
+    <div class="inventory">
+        <div class="inventory-slot" id="slot1">?</div>
+    </div>
+
+    <!-- Canvas -->
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <!-- Item Preview Modal -->
+    <div class="item-preview" id="itemPreview">
+        <img src="" id="previewImage" alt="Item">
+        <p style="color: white; font-family: Arial, sans-serif;">Collected Item</p>
+    </div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
+        // Load player image
         const playerImg = new Image();
         playerImg.src = 'player.png';
 
+        // Player setup
         const player = { x: 240, y: 340, speed: 3, width: 70, height: 78 };
+        const keys = {};
+
+        // Door setup (for changing maps)
         const door = { x: 205, y: 540, width: 140, height: 35, map: 'play.html' };
 
-        const keys = {};
+        // Single item setup
+        let item = { x: 300, y: 300, size: 40, obtained: false, image: "item.jpg" };
+
+        // Load inventory from localStorage
+        let inventory = localStorage.getItem("inventoryItem");
+        if (inventory) {
+            item.obtained = true; // Prevents item from reappearing
+            document.getElementById("slot1").innerHTML = `<img src="${inventory}" alt="Item">`;
+        }
+
+        // Keyboard event listeners
         document.addEventListener('keydown', (e) => { keys[e.key.toLowerCase()] = true; });
         document.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
 
-        function checkDoorCollision() {
+        function checkCollision() {
+            // Item collision
+            if (
+                player.x < item.x + item.size &&
+                player.x + player.width > item.x &&
+                player.y < item.y + item.size &&
+                player.y + player.height > item.y &&
+                !item.obtained
+            ) {
+                item.obtained = true;
+                inventory = item.image;
+                localStorage.setItem("inventoryItem", item.image); // Save to localStorage
+                document.getElementById("slot1").innerHTML = `<img src="${item.image}" alt="Item">`;
+                alert(`You obtained the item!`);
+            }
+
+            // Door collision (for map transition)
             if (
                 player.x < door.x + door.width &&
                 player.x + player.width > door.x &&
                 player.y < door.y + door.height &&
                 player.y + player.height > door.y
             ) {
-                window.location.href = door.map;
+                window.location.href = door.map; // Change to play.html
             }
         }
 
@@ -55,17 +145,24 @@
             if (keys['arrowleft'] || keys['a']) player.x -= player.speed;
             if (keys['arrowright'] || keys['d']) player.x += player.speed;
 
+            // Keep player within boundaries
             player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
             player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
-            checkDoorCollision();
+
+            checkCollision();
         }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player
             ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
-            
-            ctx.fillStyle = "blue";
-            ctx.fillRect(door.x, door.y, door.width, door.height);
+
+            // Draw item if not obtained
+            if (!item.obtained) {
+                ctx.fillStyle = "gold";
+                ctx.fillRect(item.x, item.y, item.size, item.size);
+            }
         }
 
         function gameLoop() {
@@ -75,6 +172,21 @@
         }
 
         gameLoop();
+
+        // Inventory click event to show item preview
+        document.getElementById("slot1").addEventListener("click", function () {
+            if (inventory) {
+                document.getElementById("previewImage").src = inventory;
+                document.getElementById("itemPreview").style.display = "block";
+            }
+        });
+
+        // Click anywhere to close item preview
+        document.getElementById("itemPreview").addEventListener("click", function () {
+            this.style.display = "none";
+        });
+
     </script>
+
 </body>
 </html>
