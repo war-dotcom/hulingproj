@@ -80,9 +80,12 @@
             background-size: cover;
             border: 2px solid black;
         }
+
+       
     </style>
 </head>
 <body>
+    
 
     <!-- Initial Loading Screen -->
     <div class="loading-screen" id="initialLoadingScreen">
@@ -108,6 +111,7 @@
     </div>
     
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+
     
     <script>
         const dialogues = [
@@ -164,6 +168,8 @@
             ];
 
             const keys = {};
+
+
             
             let camera = { x: 0, y: 0, width: canvas.width, height: canvas.height };
             let mapWidth = 1600;
@@ -181,6 +187,8 @@
                         player.y + player.height > door.y
                     ) {
                         window.location.href = door.map;
+
+                       
                     }
                 }
             }
@@ -208,7 +216,7 @@
     ctx.drawImage(background, -camera.x, -camera.y, mapWidth, mapHeight);
     ctx.drawImage(playerImg, player.x - camera.x, player.y - camera.y, player.width, player.height);
 
-    // Doors are no longer drawn, but still exist for collision detection
+
 }
 
             function gameLoop() {
