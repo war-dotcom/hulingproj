@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghostly Heist</title>
+   <link rel="stylesheet" href="style.css">
+   <style>
+    /* Import Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+15&display=swap');
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+    </nav>
+    <div class="titleBtn-container">
+        <div class="title-container">
+            <h1 id="title">Night Heist</h1>
+            <div class="image-container">
+                <img src="pixil-frame-0.jpeg">
+               </div>
+              <div class="button-container">
+                <a href="about.html" class="menu-button" id="about">About</a>
+                <a href="play.html" class="menu-button" id="play">Play</a>
+                <audio id="sound" src="switch-150130 (mp3cut.net).mp3" preload="auto"></audio>
+                
+              </div>
+        </div>
+    </div>
+
+    
+    
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="threeinmorning-312046.mp3" type="audio/mp3">
+    </audio>
+    <iframe src="home.html" id="audioFrame" style="display: none;"></iframe>
+    <script src="function.js"></script>
+</body>
+</html>

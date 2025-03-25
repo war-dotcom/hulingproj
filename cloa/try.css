@@ -1,0 +1,54 @@
+
+/* Game container */
+.dialogue-container {
+    width: 600px;
+    height: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Game screen */
+.game-screen {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Character portrait */
+#character {
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Dialogue box */
+#dialogue {
+    margin-top: 10px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+/* Next button */
+.next-btn {
+    padding: 10px;
+    text-align: center;
+}
+
+.next-btn button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.next-btn button:hover {
+    background-color: #005f72;
+}
